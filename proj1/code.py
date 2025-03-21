@@ -117,7 +117,7 @@ def minimizer(guess):
     res=simulate(y0=0,delta=dez,event=None)
     if(len(res.t)==0):
         return np.inf
-    real_y=gaussian(res.t,a,u,sigma)
+    real_y=gaussian(res.t,25,50,25)
     mse=np.mean((res.y[0]-real_y)**2)
     return mse
 #print(minimizer([1,49,1]))
@@ -132,17 +132,20 @@ for i in testval:
             res=scipy.optimize.minimize(minimizer,[i,j,k])
             if(res.success==True):
                 print(res)
-##"""
+#"""
 def plotter():
-    a=1 
-    u=49
-    sigma=1
+    a=3.993e+01
+    u=-2.499e+02 
+    sigma=4.915e+01
+    #a=1 
+    #u=49
+    #sigma=1
     def dez(t):
         return gaussian(t,a,u,sigma)
     res=simulate(y0=0,delta=dez,event=None)
-    print(res.t)
-    real_y=gaussian(res.t,a,u,sigma)
-    #plt.plot(res.t,res.y[1],color='blue')
+    print(res)
+    real_y=gaussian(res.t,25,50,25)
+    plt.plot(res.t,res.y[0],color='blue')
     plt.plot(res.t,real_y)
     plt.show()
 #plotter()
