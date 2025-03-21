@@ -30,7 +30,7 @@ def fdot_linear(t,y,delta,a,b,v0):
     return [v0*(a*delta(t)/b+y[1]),v0*delta(t)/b]
 
 def simulate(t=[0,100],v0=10,a=1.1,b=3.3,y0=2,theta0=0,delta=delta,event=(ydot,thetadot),fdot=fdot):
-    t_span=np.arange(0, 100.1, 0.1)
+    t_span=np.arange(0, 101,5)
     res=scipy.integrate.solve_ivp(fdot,t,[y0,theta0],method='DOP853',vectorized=False,t_eval=t_span,args=(delta,a,b,v0),rtol=1e-13,events=event)
     return res
 
@@ -130,15 +130,16 @@ def minimizer(guess):
 #print(minimizer([1,49,1]))
 
 def work(guess):
-    res=scipy.optimize.minimize(minimizer,guess)
+    options={'maxiter':10}
+    res=scipy.optimize.minimize(minimizer,guess,tol=1,options=options)
     print(f'{ guess} : { res.x }-> {res.fun}')
     if(res.success==True):
         print(res)
 #"""
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
 size = [3*x for x in reversed(range (3,5))]
-testvalue=[random.randint(1,100) for x in range ( 4,9,2)]
 for length in size:
+    testvalue=[random.randint(1,100) for x in range ( 4,9,2)]
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
     num_cores = multiprocessing.cpu_count()
     with multiprocessing.Pool(num_cores) as pool:
@@ -155,8 +156,7 @@ for i in testval:
                 print(res)
 #"""
 def plotter():
-    guess=[15.98753643,15.73160638,15.79952378,15.98753643,15.73160638,15.79952378
-,15.7716394 ,35.8114851, 35.8718295 ]
+    guess=[23.36933557,23.06962894,23.198646 , 23.36933557,23.06962894,23.198646 , 3.52108979, 3.4250309 , 3.18470741, 3.38102216 ,3.11939477,52.11371241 ] 
     def dez(t):
         val=0
         for i in range(0,len(guess)-2,3):
@@ -169,4 +169,4 @@ def plotter():
     plt.plot(res.t,res.y[0],color='blue')
     plt.plot(res.t,real_y,color='red')
     plt.show()
-#plotter()
+plotter()
