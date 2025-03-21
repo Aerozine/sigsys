@@ -1,6 +1,8 @@
 import numpy as np 
+import multiprocessing
 from matplotlib import pyplot as plt 
 import scipy 
+import itertools
 
 #@np.vectorize
 def v0sinalpha(t,delta , a,b,v0,theta=0):
@@ -112,9 +114,12 @@ def gaussian(t,a,u,sigma2):
     return a*np.exp(-((t-u)**2)/(2*sigma2))/np.sqrt(2*np.pi*sigma2)
 
 def minimizer(guess):
-    a,u,sigma=guess
     def dez(t):
-        return gaussian(t,a,u,sigma)
+        val=0
+        for i in range(0,len(guess)-2,3):
+            a,u,sigma=guess[i:i+3]
+            val+=gaussian(t,a,u,sigma)
+        return val
     res=simulate(y0=0,delta=dez,event=None)
     if(len(res.t)==0):
         return np.inf
@@ -123,8 +128,20 @@ def minimizer(guess):
     return mse
 #print(minimizer([1,49,1]))
 
+def work(guess):
+    res=scipy.optimize.minimize(minimizer,guess)
+    if(res.success==True):
+        print(res)
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
-#"""
+size = [3*x for x in range (1,4)]
+testvalue=[x**2 for x in range ( 1,7)]
+for length in size:
+    echantillon=list(itertools.combinations_with_replacement(testvalue,length))
+    num_cores = multiprocessing.cpu_count()
+    with multiprocessing.Pool(num_cores) as pool:
+        pool.map(work,echantillon)
+
+"""
 testval= [x**2 for x in range(1, 11)]
 for i in testval:
     for j in testval:
@@ -136,15 +153,15 @@ for i in testval:
 #"""
 def plotter():
     a,u,sigma=[ 9.195e+00, -4.823e+01 , 7.126e+01]
-    #a=1 
-    #u=49
-    #sigma=1
+    a=25
+    u=50
+    sigma=25
     def dez(t):
         return gaussian(t,a,u,sigma)
     res=simulate(y0=0,delta=dez,event=None)
     print(res)
     real_y=gaussian(res.t,25,50,25)
     plt.plot(res.t,res.y[0],color='blue')
-    plt.plot(res.t,real_y,color='red')
+    #plt.plot(res.t,real_y,color='red')
     plt.show()
 #plotter()
