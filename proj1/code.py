@@ -111,7 +111,6 @@ def gaussian(t,a,u,sigma2):
     return a*np.exp(-((t-u)**2)/(2*sigma2))/np.sqrt(2*np.pi*sigma2)
 
 def minimizer(guess):
-    print(guess)
     a,u,sigma=guess
     def dez(t):
         return gaussian(t,a,u,sigma)
@@ -120,4 +119,8 @@ def minimizer(guess):
     mse=np.mean((res.y-real_y)**2)
     return mse
 
-print(scipy.optimize.minimize(minimizer,[25,50,25]))
+testval= [x**2 for x in range(1, 11)]
+for i in testval:
+    for j in testval:
+        for k in testval:
+            print(scipy.optimize.minimize(minimizer,[i,j,k]))
