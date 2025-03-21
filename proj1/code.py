@@ -137,7 +137,8 @@ def work(guess):
         print(res)
 #"""
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
-size = [3*x for x in reversed(range (3,5))]
+size = [3*x for x in reversed(range (3,4))]
+size=[9]
 for length in size:
     testvalue=[random.randint(1,100) for x in range ( 4,9,2)]
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
