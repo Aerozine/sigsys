@@ -130,7 +130,7 @@ def minimizer(guess):
 
 def work(guess):
     res=scipy.optimize.minimize(minimizer,guess)
-    print(guess)
+    print(f'{ guess} : { res.x }-> {res.fun}')
     if(res.success==True):
         print(res)
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
@@ -139,7 +139,6 @@ testvalue=[x**2 for x in range ( 4,8,2)]
 for length in size:
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
     num_cores = multiprocessing.cpu_count()
-    num_cores=1
     with multiprocessing.Pool(num_cores) as pool:
         pool.map(work,echantillon)
 
