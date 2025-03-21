@@ -124,5 +124,5 @@ for i in testval:
     for j in testval:
         for k in testval:
             res=scipy.optimize.minimize(minimizer,[i,j,k])
-            if(res.succes==True)
+            if(res.succes==True):
                 print(res)
