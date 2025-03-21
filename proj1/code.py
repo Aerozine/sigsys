@@ -133,7 +133,7 @@ def work(guess):
     if(res.success==True):
         print(res)
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
-size = [3*x for x in range (1,4)]
+size = [3*x for x in range (2,4)]
 testvalue=[x**2 for x in range ( 1,7)]
 for length in size:
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
