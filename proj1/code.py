@@ -134,7 +134,7 @@ def work(guess):
         print(res)
     pbar.update(1)
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
-size = [3*x for x in range (2,5)]
+size = [3*x for x in reversed(range (2,5))]
 testvalue=[x**2 for x in range ( 1,8,2)]
 for length in size:
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
