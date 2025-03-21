@@ -108,6 +108,7 @@ def plot():
 
 @np.vectorize
 def gaussian(t,a,u,sigma2):
+    sigma2=np.abs(sigma2)
     return a*np.exp(-((t-u)**2)/(2*sigma2))/np.sqrt(2*np.pi*sigma2)
 
 def minimizer(guess):
@@ -134,9 +135,7 @@ for i in testval:
                 print(res)
 #"""
 def plotter():
-    a=3.993e+01
-    u=-2.499e+02 
-    sigma=4.915e+01
+    a,u,sigma=[ 9.195e+00, -4.823e+01 , 7.126e+01]
     #a=1 
     #u=49
     #sigma=1
@@ -146,6 +145,6 @@ def plotter():
     print(res)
     real_y=gaussian(res.t,25,50,25)
     plt.plot(res.t,res.y[0],color='blue')
-    plt.plot(res.t,real_y)
+    plt.plot(res.t,real_y,color='red')
     plt.show()
 #plotter()
