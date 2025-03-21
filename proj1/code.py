@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 import scipy 
 import itertools
 import tqdm
+import random
 #@np.vectorize
 def v0sinalpha(t,delta , a,b,v0,theta=0):
     return v0*np.sin(theta+np.arctan2(a*np.tan(delta(t)),b))
@@ -136,7 +137,7 @@ def work(guess):
 #"""
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
 size = [3*x for x in reversed(range (3,5))]
-testvalue=[x**2 for x in range ( 4,9,2)]
+testvalue=[random.randint(1,100) for x in range ( 4,9,2)]
 for length in size:
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
     num_cores = multiprocessing.cpu_count()
