@@ -23,18 +23,10 @@ def fdot(t,y,delta,a,b,v0):
 def fdotprod(t,y,delta,a,b,v0):
     return ydot(t,y,delta,v0,a,b)*thetadot(t,y,delta,a,b,v0) 
 
-@np.vectorize
-def gaussian(t,a,u,sigma2):
-    return a*np.exp(-((t-u)**2)/(2sigma2))/np.sqrt(2*np.pi*sigma2)
-
-def minimizer():
-    res=scipy.integrate.solve_ivp()
-    y_real=gaussian(res.t,)
-
 def fdot_linear(t,y,delta,a,b,v0):
     return [v0*(a*delta(t)/b+y[1]),v0*delta(t)/b]
 
-def simulate(t=[0,100],v0=10,a=1.1,b=3.3,y0=2,theta0=0,dt=0.1,delta=delta,event=(ydot,thetadot),fdot=fdot):
+def simulate(t=[0,100],v0=10,a=1.1,b=3.3,y0=2,theta0=0,delta=delta,event=(ydot,thetadot),fdot=fdot):
     res=scipy.integrate.solve_ivp(fdot,t,[y0,theta0],method='DOP853',vectorized=False,args=(delta,a,b,v0),rtol=1e-13,events=event)
     return res
 
@@ -44,10 +36,6 @@ def data():
     np.savez("data/Q3_t.npz",res.t)
     np.savez("data/Q3_y0.npz",res.y[0])
     np.savez("data/Q3_y1.npz",res.y[1])
-    for dez in [lambda x:0,lambda x:2.5,lambda x:15]:
-        res=simulate(delta=dez,event=None)
-        np.savez(f"data/Q7_t_{}.npz")
-        res=simulate(fdot=fdot_linear,delta=dez,event=None)
 
 data()
 def plot3():
@@ -118,3 +106,18 @@ def plot():
 
 
 
+@np.vectorize
+def gaussian(t,a,u,sigma2):
+    return a*np.exp(-((t-u)**2)/(2*sigma2))/np.sqrt(2*np.pi*sigma2)
+
+def minimizer(guess):
+    print(guess)
+    a,u,sigma=guess
+    def dez(t):
+        return gaussian(t,a,u,sigma)
+    res=simulate(y0=0,delta=dez,event=None)
+    real_y=gaussian(res.t,a,u,sigma)
+    mse=np.mean((res.y-real_y)**2)
+    return mse
+
+print(scipy.optimize.minimize(minimizer,[25,50,25]))
