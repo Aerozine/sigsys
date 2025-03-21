@@ -140,7 +140,7 @@ def work(guess):
 size = [3*x for x in reversed(range (3,4))]
 size=[9]
 for length in size:
-    testvalue=[random.randint(1,100) for x in range ( 4,9,2)]
+    testvalue=[random.randint(1,100) for x in range ( 10)]
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
     num_cores = multiprocessing.cpu_count()
     with multiprocessing.Pool(num_cores) as pool:
