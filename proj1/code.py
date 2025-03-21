@@ -27,7 +27,8 @@ def fdot_linear(t,y,delta,a,b,v0):
     return [v0*(a*delta(t)/b+y[1]),v0*delta(t)/b]
 
 def simulate(t=[0,100],v0=10,a=1.1,b=3.3,y0=2,theta0=0,delta=delta,event=(ydot,thetadot),fdot=fdot):
-    res=scipy.integrate.solve_ivp(fdot,t,[y0,theta0],method='DOP853',vectorized=False,args=(delta,a,b,v0),rtol=1e-13,events=event)
+    t_span=np.arange(0, 100.1, 0.1)
+    res=scipy.integrate.solve_ivp(fdot,t,[y0,theta0],method='DOP853',vectorized=False,t_eval=t_span,args=(delta,a,b,v0),rtol=1e-13,events=event)
     return res
 
 def data():
@@ -55,7 +56,7 @@ def plot3():
     ax2.set_ylabel('y')
     ax2.legend()
     fig.savefig("pyplot/Q3.png")
-plot3()
+#plot3()
 def plot():
     #question=["data/Q3.npz","data/Q3.2.npz","data/Q8.npz"]
     res = simulate()
@@ -105,7 +106,6 @@ def plot():
 
 
 
-
 @np.vectorize
 def gaussian(t,a,u,sigma2):
     return a*np.exp(-((t-u)**2)/(2*sigma2))/np.sqrt(2*np.pi*sigma2)
@@ -116,13 +116,32 @@ def minimizer(guess):
         return gaussian(t,a,u,sigma)
     res=simulate(y0=0,delta=dez,event=None)
     real_y=gaussian(res.t,a,u,sigma)
-    mse=np.mean((res.y-real_y)**2)
+    mse=np.mean((res.y[0]-real_y)**2)
     return mse
+#print(minimizer([1,49,1]))
 
-testval= [x**2 for x in range(1, 11)]
+#print(scipy.optimize.minimize(minimizer,[1,1,1]))
+
+#"""
+testval= [x**2 for x in range(2, 9)]
 for i in testval:
     for j in testval:
         for k in testval:
+            print(f'{i},{j},{k}')
             res=scipy.optimize.minimize(minimizer,[i,j,k])
             if(res.success==True):
                 print(res)
+#"""
+def plotter():
+    a=1 
+    u=49
+    sigma=1
+    def dez(t):
+        return gaussian(t,a,u,sigma)
+    res=simulate(y0=0,delta=dez,event=None)
+    print(res.t)
+    real_y=gaussian(res.t,a,u,sigma)
+    #plt.plot(res.t,res.y[1],color='blue')
+    plt.plot(res.t,real_y)
+    plt.show()
+#plotter()
