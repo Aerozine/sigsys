@@ -123,4 +123,6 @@ testval= [x**2 for x in range(1, 11)]
 for i in testval:
     for j in testval:
         for k in testval:
-            print(scipy.optimize.minimize(minimizer,[i,j,k]))
+            res=scipy.optimize.minimize(minimizer,[i,j,k])
+            if(res.succes=True)
+                print(res)
