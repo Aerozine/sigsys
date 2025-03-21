@@ -133,15 +133,16 @@ def work(guess):
     print(f'{ guess} : { res.x }-> {res.fun}')
     if(res.success==True):
         print(res)
+#"""
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
-size = [3*x for x in reversed(range (2,4))]
-testvalue=[x**2 for x in range ( 4,8,2)]
+size = [3*x for x in reversed(range (3,5))]
+testvalue=[x**2 for x in range ( 4,9,2)]
 for length in size:
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
     num_cores = multiprocessing.cpu_count()
     with multiprocessing.Pool(num_cores) as pool:
         pool.map(work,echantillon)
-
+#"""
 """
 testval= [x**2 for x in range(1, 11)]
 for i in testval:
@@ -153,16 +154,18 @@ for i in testval:
                 print(res)
 #"""
 def plotter():
-    a,u,sigma=[ 9.195e+00, -4.823e+01 , 7.126e+01]
-    a=25
-    u=50
-    sigma=25
+    guess=[15.98753643,15.73160638,15.79952378,15.98753643,15.73160638,15.79952378
+,15.7716394 ,35.8114851, 35.8718295 ]
     def dez(t):
-        return gaussian(t,a,u,sigma)
+        val=0
+        for i in range(0,len(guess)-2,3):
+            a,u,sigma=guess[i:i+3]
+            val+=gaussian(t,a,u,sigma)
+        return val
     res=simulate(y0=0,delta=dez,event=None)
     print(res)
     real_y=gaussian(res.t,25,50,25)
     plt.plot(res.t,res.y[0],color='blue')
-    #plt.plot(res.t,real_y,color='red')
+    plt.plot(res.t,real_y,color='red')
     plt.show()
 #plotter()
