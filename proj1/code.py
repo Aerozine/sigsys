@@ -3,7 +3,7 @@ import multiprocessing
 from matplotlib import pyplot as plt 
 import scipy 
 import itertools
-
+import tqdm
 #@np.vectorize
 def v0sinalpha(t,delta , a,b,v0,theta=0):
     return v0*np.sin(theta+np.arctan2(a*np.tan(delta(t)),b))
@@ -132,9 +132,10 @@ def work(guess):
     res=scipy.optimize.minimize(minimizer,guess)
     if(res.success==True):
         print(res)
+    pbar.update(1)
 #print(scipy.optimize.minimize(minimizer,[1,1,1]))
-size = [3*x for x in range (2,4)]
-testvalue=[x**2 for x in range ( 1,7)]
+size = [3*x for x in range (2,5)]
+testvalue=[x**2 for x in range ( 1,8,2)]
 for length in size:
     echantillon=list(itertools.combinations_with_replacement(testvalue,length))
     num_cores = multiprocessing.cpu_count()
