@@ -1,4 +1,3 @@
-
 using Base.Threads
 using ProgressMeter
 using LinearAlgebra
@@ -17,10 +16,10 @@ const v0=10.0
 include("search.jl")
 "
 todolist
-- pimp graph
-- document 
-- part 2
-
+- pimp all graph
+- document code  
+- part 2 n 3
+-> makefile the latex in such a way that it will get the image based on the code 
 "
 
 #    ____            _     _ 
@@ -65,7 +64,7 @@ end
 #Q1_3();Q1_7();Q1_8()
 # for doing random search
 #random_search(Int(5e8))
-
+grid_search()
 #    ____            _     ____  
 #   |  _ \ __ _ _ __| |_  |___ \ 
 #   | |_) / _` | '__| __|   __) |

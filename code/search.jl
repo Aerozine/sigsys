@@ -88,36 +88,44 @@ end
 grid search accros the interval
 maybe used to paufine random search later ...
 "
+const dt=0.01
 function grid_search()
-  dmu_range=10:0.1:30
-  sigma1_range=0:0.1:5
-  sigma2_range=0:0.1:5
-  a1_range=0:0.1:2
-  a2_range=-2:0.1:2
-  minval=[0,0,0,0,0]
-  min_mse=1e15
+  dmu_range=5:dt:6
+  sigma1_range=3:dt:5
+  sigma2_range=3:dt:5
+  a1_range=0.01:dt:0.05
+  a2_range=-0.08:dt:-0.04
+  min_mse=Float64(Inf)
+  minval = Vector{Float64}(undef, 5)      
+  it_count=Int(0)
+  lock=Threads.ReentrantLock();
+  n=length(dmu_range)*length(sigma1_range)*length(sigma2_range)*length(a1_range)*length(a2_range) 
+  progress=Progress(n,1)
+  println("starting $(n) task ,multithreading with $(Sys.CPU_THREADS) threads :")
   total_it=length(dmu_range)*length(sigma1_range)*length(sigma2_range)*length(a1_range)*length(a2_range)
   progress=Progress(total_it,1) 
-it_count = Threads.Atomic{Int}(0)
 Threads.@threads for dmu in dmu_range
     for sigma1 in sigma1_range
       for sigma2 in sigma2_range
          for a1 in a1_range
            for a2 in a2_range
-            localmse=mse([dmu,sigma1,sigma2,a1,a2]) 
-            # check atomicity here 
-            # LOCK WIP 
-            if localmse<min_mse
-              min_mse=localmse
-              minval=[dmu,sigma1,sigma2,a1,a2] 
+             local_mse=mse([dmu,sigma1,sigma2,a1,a2]) 
+            # lock allow the use of variable accros thread (ie  not 2 writer at the same time )
+                 Threads.lock(lock) do
+              if min_mse > local_mse 
+                      min_mse=local_mse
+                      minval.=dmu,sigma1,sigma2,a1,a2 
+                 end
+              it_count+=1
+              # fancy stuff
+              next!(progress; showvalues=[("Iterations", "$(it_count) / $(n)"), ("min val", "$(min_mse)"),("best params" ,"$(minval)")])
+
             end
-                        Threads.atomic_add!(it_count, 1)
-                        next!(progress; showvalues=[("Iterations", "$(it_count[]) / $(total_it) \n min val $(min_mse) with $(minval)")])
-          end
         end
       end
     end
   end
+end
   println(minval)
   println(min_mse)
 end
