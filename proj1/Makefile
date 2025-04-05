@@ -1,9 +1,0 @@
-.PHONY: prun jrun clean 
-jrun:
-	julia main.jl
-
-prun:
-	python main.py	
-
-clean:
-
