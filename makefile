@@ -1,14 +1,15 @@
 
-.PHONY:all run code rapport 
-all: code rapport
-run: code rapport
+.PHONY:all run code report 
+all: code report
+run: code report
 
 NPROCS = $(shell nprocs)
 code:
+	$(MAKE) -j$(NPROCS) -C code init 
 	$(MAKE) -j$(NPROCS) -C code jrun
-rapport:
-	$(MAKE) -j$(NPROCS) -C rapport build
+report: code
+	$(MAKE) -j$(NPROCS) -C report build
 
 clean:
 	make clean -C code 
-	make clean -C rapport 
+	make clean -C report 
