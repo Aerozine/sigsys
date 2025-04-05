@@ -20,6 +20,7 @@ todolist
 - document code  
 - part 2 n 3
 -> makefile the latex in such a way that it will get the image based on the code 
+-> JuliaFormater ?
 "
 
 #    ____            _     _ 

@@ -3,10 +3,11 @@
 all: code rapport
 run: code rapport
 
+NPROCS = $(shell nprocs)
 code:
-	make -C code jrun
+	$(MAKE) -j$(NPROCS) -C code jrun
 rapport:
-	make -C rapport build
+	$(MAKE) -j$(NPROCS) -C rapport build
 
 clean:
 	make clean -C code 

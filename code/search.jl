@@ -60,7 +60,7 @@ function random_search(n)
   lock=Threads.ReentrantLock();
   progress=Progress(n,1)
   println("starting multithreading with $(Sys.CPU_THREADS) threads :")
-  Threads.@threads  for u in 1:1:n 
+  Threads.@threads  for _ in 1:1:n 
             # generating random value
             dmu = rand() * (dmu_range[2] - dmu_range[1]) + dmu_range[1]
             sigma1 = rand() * (sigma1_range[2] - sigma1_range[1]) + sigma1_range[1]
