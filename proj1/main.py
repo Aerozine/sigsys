@@ -1,8 +1,10 @@
-import numpy as np 
+import matplotlib 
+matplotlib.use("Agg")
 import multiprocessing
 from matplotlib import pyplot as plt 
 plt.rcParams['text.usetex']=True
 import scipy 
+import numpy as np 
 import itertools
 import tqdm
 import random
@@ -62,8 +64,6 @@ def plot3():
     ax2.set_xlabel('Temps (t)')
     ax2.set_ylabel('y')
     ax2.legend()
-    plt.show()
-    #plt.imsave("Q3.png")
     fig.savefig("pyplot/Q3.png")
 
 def plot7():
@@ -72,11 +72,10 @@ def plot7():
         res2=simulate(fdot=fdot_linear,y0=0,theta0=0,event=None,delta=lambda x:urlu)
         plt.plot(res.t,res.y[0],label=f'systeme normal pour {r'$\delta(t)$'}={urlu}')
         plt.plot(res2.t,res2.y[0],label=f'systeme linéarisé pour{r'$\delta(t)$'}={urlu}')
-        print(res2.t)
         plt.xlabel('Temps (t)')
         plt.ylabel('y(t)')
     plt.legend()
-    plt.show()
+    plt.savefig("pyplot/Q7.png")
 plot7()
 def plot():
     #question=["data/Q3.npz","data/Q3.2.npz","data/Q8.npz"]
@@ -172,7 +171,6 @@ def plotter():
             val+=gaussian(t,a,u,sigma)
         return val
     res=simulate(y0=0,delta=dez,event=None)
-    print(res)
     real_y=gaussian(res.t,25,50,25)
     plt.plot(res.t,res.y[0],color='blue')
     plt.plot(res.t,real_y,color='red')
