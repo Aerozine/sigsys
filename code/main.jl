@@ -111,6 +111,7 @@ end
     savefig("jlplots/Q2_3.pdf")
 end
 function Q2_4()
+    
     for freq in (10,1,0.2,0.01)
       k=[0.132 0.5148]
     #0.01 0.2 1 10
@@ -118,14 +119,8 @@ function Q2_4()
     prob = ODEProblem(linearcontroller, [0.0, 0.0], tspan,
         ((x -> 2 * sin(2 * pi *freq *x + pi / 6)), k, kr))
     sol = solve(prob, Tsit5())
-    plot!(sol,label=["f=$(freq)"])
+    plot!(sol.t,sol[2,:],label=["f=$(freq)"])
   end
-    #plot!(sol)
-    #time = sol.t
-    #y = sol[1, :] .^ 2
-    #plot(time[y .> 0.0], y[y .> 0.0], yscale = :log2)
-    #t = sol[2, :] .^ 2
-    #plot!(time[t .> 0.0], t[t .> 0.0], yscale = :log2)
     savefig("jlplots/Q2_4.pdf")
 end
 Q2_4()
@@ -140,12 +135,14 @@ function Q2_6()
       kr=k[1]
     prob = ODEProblem(linearcontroller, [0.0, 0.0], tspan,
         ((x -> 2 * sin(2 * pi *freq *x + pi / 6)), k, kr))
-    sol = solve(prob, Tsit5())
+    sol = solve(prob, Tsit5(),saveat=t_eval)
 
-    F = fft(signal) |> fftshift
-    freqs = fftfreq(length(sol.u), 1.0/dt) |> fftshift
-freq_domain = plot(freqs[mask], abs.(F[mask])/length(F), title = "Spectrum", xlim=(-70, +70),ylim=(0,10),line= :stem ) 
+    F = fft(sol[2,:]) |> fftshift
+    freqs = fftfreq(length(sol[2,:]), 1.0/dt) |> fftshift
+    plot(freqs, abs.(F)/length(F), title = "Spectrum", ylim=(0,3),line= :stem ) 
   end
+  savefig("jlplots/Q2_5r.pdf")
+
 end
 
 function Q2_7()
