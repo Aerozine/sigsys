@@ -248,20 +248,23 @@ s= (C-KD)x+DK_rr
 Par identification,on remarque donc que : \\
 \begin{equation}
 \begin{cases}
-
 \tilde{A} = A-KB \\
 \tilde{B} = K_rB \\
 \tilde{C} = C-KD \\
 \tilde{D} = K_rD \\
-
 \end{cases}
 \end{equation}
 \subsection{domaine fréquentiel}
-Afin de se simplifier les notation , il suffit de définir un $\omega$ comme étant $2\pi f_{ref}$ avec $f_{ref}$ la fréquence de référence . 
-\begin{equation}
-  X(jw)=\integral x(t) e^{-jwt}
-\end{equation}
-  
-pomme de terre 
 
+Afin de se simplifier les notation , il suffit de définir un $\omega$ comme étant $2\pi f_{ref}$ avec $f_{ref}$ la fréquence de référence .  \\
+ 
+\begin{align*}
+ 2sin(2\pi f t + \dfrac{\pi}{6}) & \\
+X(j\omega)=& 2 \int_{0}^{100} sin(\omega _{0}t + \phi)e^{j\omega t} dt \\
+  =& 2 \int_{\frac T2 - \frac T2} ^{\frac T2 + \frac T2} \dfrac{e^{j \omega _0 t}-e^{-j \omega _0 t}}{2j} e^{-j\omega t} dt  \\
+  =& \frac 1j \int_{\frac T2 - \frac T2} ^{\frac T2 + \frac T2} e^{j (\omega _0 - \omega)t+j\phi }- e^{-j( \omega _0+ \omega)t-j\phi} dt \\
+  =& \frac 1j \left [ \dfrac{e^{j(\omega_0-\omega)t+j\phi}}{j(\omega_0-\omega)}- \dfrac{e^{j(\omega_0-\omega)t+j\phi}}{j(\omega_0-\omega)} \right] _{\frac T2 - \frac T2} ^{\frac T2 + \frac T2} \\
+  =\dfrac{e^{j(\omega_0-\omega)\left(\frac T2+ \frac T 2 \right)+ j \phi}}{j^2 (\omega_ 0 -\omega)}-\dfrac{e^{j(\omega_0-\omega)\left(\frac T2- \frac T 2 \right)+ j \phi}}{j^2 (\omega_ 0 -\omega)} &- \dfrac{e^{j(\omega_0-\omega)\left(\frac T2+ \frac T 2 \right)+ j \phi}}{j^2 (\omega_ 0 -\omega)}-\dfrac{e^{j(\omega_0-\omega)\left(\frac T2- \frac T 2 \right)+ j \phi}}{j^2 (\omega_ 0 -\omega)} 
+\end{align*}
+% to be continued ....
 \end{document}
