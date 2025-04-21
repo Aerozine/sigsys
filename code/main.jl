@@ -178,18 +178,11 @@ function Q3_1()
     sys_tf = tf(sys_ss)
 
     display(sys_tf)
-    #w = exp10.(LinRange(-1, 2, 500))
-setPlotScale("dB")                                          # :contentReference[oaicite:1]{index=1}
-
-# 2) Generate the standard 2‑panel Bode plot, with grid and French title
+setPlotScale("dB")                              
 fig = bodeplot(sys_tf; plotphase=true, grid=true,
-               title="diagram de bode")                    # :contentReference[oaicite:2]{index=2}
-
-# 3) Relabel axes explicitly to show units
-plot!(fig[1]; xlabel="ω (rad/s)", ylabel="Magnitude (dB)")  # :contentReference[oaicite:3]{index=3}
+               title="diagram de bode")         
+plot!(fig[1]; xlabel="ω (rad/s)", ylabel="Magnitude (dB)") 
 plot!(fig[2]; xlabel="ω (rad/s)", ylabel="Phase (°)")   
-    # Generate Bode plot
-#    bodeplot(sys_tf, w; title="Bode Plot of the System", xlabel="Frequency (rad/s)", ylabel="Magnitude (dB) / Phase (deg)", layout=(2,1))
     savefig("jlplots/Q3.pdf")
 end
 

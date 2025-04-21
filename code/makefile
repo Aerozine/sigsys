@@ -1,5 +1,5 @@
-.PHONY: prun jrun clean 
-run : prun jrun
+.PHONY: jrun clean 
+run : jrun
 init:
 	julia -e 'using Pkg;Pkg.instantiate()'
 jrun:
@@ -8,9 +8,6 @@ jrunfast:
 	julia --optimize=0 --compile=min --threads=auto  main.jl
 jformat:
 	julia -e 'using JuliaFormatter; format(".", SciMLStyle())'
-
-prun:
-	python main.py	
-
 clean:
+	rm jlplots/*.pdf
 
