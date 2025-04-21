@@ -14,11 +14,7 @@ end
 
 @fastmath function linearode!(u, p, t)
     f = p
-    println(u)
-    return A * u + B * f(t)
-    #du[1]=du_t[1] du[2]=du_t[2]
-    #@inbounds du[1] = v0 * a * f(t) / b + v0 * u[2]
-    #@inbounds du[2] = v0 * f(t) / b
+    @inbounds return A * u + B * f(t)
 end
 
 function ode2!(du, u, p, t)
@@ -36,16 +32,12 @@ function gauss3(t, dmu, sigma1, sigma2, a1, a2)
     gaussian(t, sigma1, 50 + dmu, a1)
 end
 
-# precompute data to save calculation
 const real_val = gaussian.(t_eval, 5, 50, 25)
 function mse(p)
     @inbounds dmu, sigma1, sigma2, a1, a2 = p
-    # problem + solve = solveivp  
     @inbounds prob = ODEProblem(
-        ode2, [0.0, 0.0], [0, 100], (gauss3, dmu, sigma1, sigma2, a1, a2))
+        ode2!, [0.0, 0.0], [0, 100], (gauss3, dmu, sigma1, sigma2, a1, a2))
     @inbounds sol = solve(prob, saveat = t_eval)[1, :]
-    # . means operation over the array 
-    # ie .- is equal to a for loop where result[i]=real[i]-sol[i] but optimized
     @inbounds mse = mean((real_val .- sol) .^ 2)
     mse
 end
@@ -160,10 +152,9 @@ C=C-KD
 D=Dkr
 "
 
-@fastmath function linearcontroller( u, p, t)
+@fastmath function linearcontroller(u, p, t)
     d, K, kr = p
     Atild = A - B * K
     Btild = B * kr
     Atild * u + Btild * d(t)
-    #println(du)
 end
