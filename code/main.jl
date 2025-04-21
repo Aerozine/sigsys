@@ -62,7 +62,12 @@ end
     #5.470934017973268, 4.474173680361383, 4.4214549387804185,
     #0.027108495080634055, -0.054222576328522225]
 
-    mu1,mu2,mu3,sigma1,sigma2,a1,a2 = [50-5.470934017973268,50,
+    mu1, mu2,
+    mu3,
+    sigma1,
+    sigma2,
+    a1,
+    a2 = [50-5.470934017973268, 50,
         5.470934017973268+50, 4.474173680361383, 4.4214549387804185,
         0.027108495080634055, -0.054222576328522225]
     #mu1,mu2,mu3,sigma1,sigma2,a1,a2= [21.286644028118854, 58.997679172695115, 76.43477063793996, 0.1016826337641108, 
@@ -84,7 +89,7 @@ end
     plot(t_eval, sol, label = ["y(t)" "θ(t)"], linestyle = :dot)
     plot!(t_eval, real_val)
     savefig("jlplots/Q1_8.pdf")
-    println(mse([mu1,mu2,mu3,sigma1,sigma2,a1,a2]))
+    println(mse([mu1, mu2, mu3, sigma1, sigma2, a1, a2]))
 end
 #Q1_8()
 # for doing random search
@@ -172,17 +177,17 @@ function Q3_1()
     Btild = B * kr
     Ctild = C-D * k
     Dtild=D*kr
-    
+
     sys_ss = ss(Atild, Btild, Ctild, Dtild)
 
     sys_tf = tf(sys_ss)
 
     display(sys_tf)
-setPlotScale("dB")                              
-fig = bodeplot(sys_tf; plotphase=true, grid=true,
-               title="diagram de bode")         
-plot!(fig[1]; xlabel="ω (rad/s)", ylabel="Magnitude (dB)") 
-plot!(fig[2]; xlabel="ω (rad/s)", ylabel="Phase (°)")   
+    setPlotScale("dB")
+    fig = bodeplot(sys_tf; plotphase = true, grid = true,
+        title = "diagram de bode")
+    plot!(fig[1]; xlabel = "ω (rad/s)", ylabel = "Magnitude (dB)")
+    plot!(fig[2]; xlabel = "ω (rad/s)", ylabel = "Phase (°)")
     savefig("jlplots/Q3.pdf")
 end
 
@@ -196,13 +201,12 @@ end
 
 # plotting asynchronously to speed up the process
 @sync begin
-#    @async Q1_3()
-#    @async Q1_7()
-#    @async Q1_8()
-#    @async Q2_3()
-#    @async Q2_4()
-#    @async Q2_6()
+    @async Q1_3()
+    @async Q1_7()
+    @async Q1_8()
+    @async Q2_3()
+    @async Q2_4()
+    @async Q2_6()
     @async Q3_1()
-
 end
 #"
