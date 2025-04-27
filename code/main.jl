@@ -1,14 +1,15 @@
 using Base.Threads
+using OrdinaryDiffEq
+using Optimization
 using Symbolics
 using ControlSystems
 using ProgressMeter
 using LinearAlgebra
 using Plots
 using Optim
-using OrdinaryDiffEq
 using Statistics
 using FFTW
-const t_eval = 0:0.01:100
+const t_eval = 0:0.001:100
 const tspan = [0.0, 100.0]
 const a = 1.1
 const b = 3.3
@@ -21,7 +22,6 @@ const D = [0.0]
 # all the funny stuff is inside
 include("search2.jl")
 # the main file is used for plot and questions
-
 #    ____            _     _ 
 #   |  _ \ __ _ _ __| |_  / |
 #   | |_) / _` | '__| __| | |
@@ -53,57 +53,31 @@ end
         savefig("jlplots/Q1_7_$ftype_name.pdf")
     end
 end
-@fastmath function Q1_8()
-    # best guess with random_search
-    #dmu, sigma1,
-    #sigma2,
-    #a1,
-    #a2 = [
-    #5.470934017973268, 4.474173680361383, 4.4214549387804185,
-    #0.027108495080634055, -0.054222576328522225]
 
+function Q1_8()
     mu1, mu2,
     mu3,
     sigma1,
     sigma2,
     a1,
-    a2 = [50-5.470934017973268, 50,
-        5.470934017973268+50, 4.474173680361383, 4.4214549387804185,
-        0.027108495080634055, -0.054222576328522225]
-    #mu1,mu2,mu3,sigma1,sigma2,a1,a2= [21.286644028118854, 58.997679172695115, 76.43477063793996, 0.1016826337641108, 
-    #3.134927252309066, 1.5432272684688175, -1.3848950884321622]
-
-    #mu1, mu2,
-    #mu3,
-    #sigma1,
-    #sigma2,
-    #a1,
-    #a2 = [44.230719624796386, 48.96366028224329, 53.20962706874073, 3.406846505976441,
-    #    3.1681776456999535, 0.0352139637276877, -0.07094820532273971]#[50-5.470934017973268,50,
-    #        5.470934017973268+50, 4.474173680361383, 4.4214549387804185,
-    #        0.027108495080634055, -0.054222576328522225]
+    a2 =[44.47466746957489, 50.10972389695686, 55.7445931340356, 4.504552894450979, 4.151233595972581, 0.023696291835675492, -0.047392683335653336]
     @inbounds prob = ODEProblem(
-        ode2!, [0.0, 0.0], [0, 100], (gauss3, mu1, mu2, mu3, sigma1, sigma2, a1, a2))
+     linearode2!, [0.0, 0.0], [0, 100], (gauss3, mu1, mu2, mu3, sigma1, sigma2, a1, a2))
     @inbounds sol = solve(prob, saveat = t_eval)[1, :]
     real_val = gaussian.(t_eval, 5, 50, 25)
     plot(t_eval, sol, label = ["y(t)" "θ(t)"], linestyle = :dot)
     plot!(t_eval, real_val)
+    #plot(t_eval,abs.(sol.-real_val))
     savefig("jlplots/Q1_8.pdf")
-    println(mse([mu1, mu2, mu3, sigma1, sigma2, a1, a2]))
+    println("best MSE :$(mse([mu1, mu2, mu3, sigma1 , sigma2, a1, a2]))")
 end
-#Q1_8()
-# for doing random search
-#random_search(Int(1e9))
+
 #    ____            _     ____  
 #   |  _ \ __ _ _ __| |_  |___ \ 
 #   | |_) / _` | '__| __|   __) |
 #   |  __/ (_| | |  | |_   / __/ 
 #   |_|   \__,_|_|   \__| |_____|
 #
-#TODO
-#check graph quality 
-#beautify and consistency
-#2_3 -> change label 
 @fastmath function Q2_3()
     rplot=plot()
     uplot=plot()
@@ -141,6 +115,7 @@ function Q2_4()
     plot(subplots[1], subplots[2], subplots[3], subplots[4], layout = (4, 1))
     savefig("jlplots/Q2_4.pdf")
 end
+
 # 2_6 -> do a mask to hide smol freq <0.001 or justify it on the report
 function Q2_6()
     dt=t_eval[2]-t_eval[1]
@@ -162,7 +137,7 @@ function Q2_6()
         end
     end
     plot(subplots[1], subplots[2], subplots[3], subplots[4], layout = (2, 2))
-    savefig("jlplots/Q2_5r.pdf")
+    savefig("jlplots/Q2_6.pdf")
 end
 
 #    ____            _   _____ 
@@ -177,11 +152,8 @@ function Q3_1()
     Btild = B * kr
     Ctild = C-D * k
     Dtild=D*kr
-
     sys_ss = ss(Atild, Btild, Ctild, Dtild)
-
     sys_tf = tf(sys_ss)
-
     display(sys_tf)
     setPlotScale("dB")
     fig = bodeplot(sys_tf; plotphase = true, grid = true,
@@ -198,7 +170,9 @@ end
 #   |_|   |_|\___/ \__|\__|_|_| |_|\__, |
 #                                  |___/ 
 #
-
+#random_search(Int(1e9))
+#paufiner()
+#"
 # plotting asynchronously to speed up the process
 @sync begin
     @async Q1_3()

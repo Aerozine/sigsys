@@ -35,18 +35,8 @@ pagecommand={#1}]{#2} % wierd wizard stuff
 }
 \usepackage{lipsum}
 \usepackage{listings}
-\newcommand{\dd}{d_1}
-\newcommand{\dt}{d_T}
-\newcommand{\da}{d_A}
+\newcommand{\gaussian}[3]{\dfrac{#1}{\sqrt{2\pi #3^2}} \exp\left(-\dfrac{(t - #2)^2}{2#3^2}\right)}
 \newcommand{\blank}{\mathrel{\underline{\hspace{2em}}}}
-\newcommand{\Ma}{M_A}
-\newcommand{\Mt}{M_T}
-\newcommand{\Na}{N_A}
-\newcommand{\Nt}{N_T}
-\newcommand{\ddd}{d_2}
-\newcommand{\Fr}{F_r}
-\newcommand{\Ft}{F_t}
-\newcommand{\Fa}{F_a}
 \DeclareMathOperator{\Var}{Var}
 \newcommand{\cotan}{\mathrm{cotan}}
 \begin{document}
@@ -90,8 +80,10 @@ pagecommand={#1}]{#2} % wierd wizard stuff
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{displayquote}
+Dans le cadre de ce rapport , nous utiliseront la notation $\dot y$ qui correspond à $\dfrac{d y}{dt}$.
+\end{displayquote}
 \section{Part 1: modèle d'état, linéarisation et simulations}
-%donnez toutes les nonlinéarités et les fonctions non-linéaires sont appliquées sur quoi ? Le temps ?, un signal ? Lequel ?
 \subsection{linéarité du modèle dynamique}
 Le système n’est pas linéaire, car il ne respecte pas les principes de superposition et d’homogénéité, en raison de la présence de fonctions non linéaires ( sin , tan , arctan) dans sa dynamique ainsi que de l'adition de variable d'état $\theta(t)$ à une fonction d'entrée $\delta(t)$ dans un sinus .
 
@@ -106,11 +98,10 @@ Pour tout les signaux mentionnés , nous supposeront que $t \in \mathbb{R}^+$ vu
       \item $y(t)$ représente l'évolution temporelle de la position selon l'axe vertical.Il n'y a pas de contrainte dans l'énoncé, on peut donc supposer que son domaine de définition ainsi que son image appartiennent à $\mathbb{R}$
       \item $\theta(t)$ représente l'évolution temporelle de l'orientation du véhicule dans l'espace.Vu qu'il s'agit d'un angle , on peut raisonablement restreindre son image à l'intervale $ [ 0 , 2\pi]$
     \end{itemize}
-	      $\theta$ quant'à lui représente l'évolution temporelle de l'orientation du véhicule dans l'espace.Vu qu'il s'agit d'un angle , on peut raisonablement restreindre son image à l'intervale $[ 0,2\pi]$
 	\item constantes: a , b , $v_0$ \begin{itemize}
 	 \item 
-    a est la distance entre l'axe arrière et le centre de masse du véhicule. 
-    \item b , la distance entre l'axe des roues avant et celui des roues arrière.
+    a correspond à la distance entre l'axe arrière et le centre de masse du véhicule. 
+    \item b correspond à la distance entre l'axe des roues avant et celui des roues arrière.
     \item $v_0$ représente la vitesse du centre de masse.
 
 	\end{itemize}
@@ -121,18 +112,15 @@ Pour tout les signaux mentionnés , nous supposeront que $t \in \mathbb{R}^+$ vu
 \subsubsection{cas d'un mouvement avec les roues fixes}
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.5\linewidth]{../code/jlplots/Q1_3_zero.pdf}
+	\includegraphics[width=0.95\linewidth]{../code/jlplots/Q1_3_zero.pdf}
 \end{figure}
 \newpage
 \subsubsection{cas d'un mouvement dont les roues oscillent sinusoidalement}
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.5\linewidth]{../code/jlplots/Q1_3_delta.pdf}
+	\includegraphics[width=0.95\linewidth]{../code/jlplots/Q1_3_delta.pdf}
 \end{figure}
 \subsection{Points d'équilibre du système}
-\begin{displayquote}
-Dans le cadre de ce rapport , nous utiliseront la notation $\dot y$ qui correspond à $\dfrac{d y}{dt}$.
-\end{displayquote}
 Afin de trouver les points d'équilibre du système de manière analytique il suffit de trouver :
 \begin{equation}
 	\begin{cases}
@@ -220,11 +208,11 @@ Vu que ses valeurs sont nulles , on ne peux donc rien conclure concernant la sta
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.5\linewidth]{../code/jlplots/Q1_7_ODE.pdf}
+	\includegraphics[width=0.95\linewidth]{../code/jlplots/Q1_7_ODE.pdf}
 \end{figure}
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.5\linewidth]{../code/jlplots/Q1_7_linearODE.pdf}
+	\includegraphics[width=0.95\linewidth]{../code/jlplots/Q1_7_linearODE.pdf}
 \end{figure}
 On peut constater que les fonctions non linéaire ont le même résultat que celle du modèle ABCD.
 Vu que l'on fixe $\delta$ a une constante qui ne dépends pas du temps , 
@@ -239,8 +227,39 @@ la valeur de $\dot \theta$ n'est pas modifié au fur et a mesure du temps et don
   \end{center}
   \caption{}\label{fig:Q1_8_gaussian}
 \end{figure}
+La solution la plus cohérente pour cette question est
+$$\displaystyle\sum_{i=0}^{3}{\gaussian{A_i}{\sigma_i}{\mu_i}}$$
+avec comme coeficient :
+\begin{equation}
+  \begin{cases}
+    \mu_1= 44.47466746957489 \\
+    \mu_2=50.10972389695686 \\
+    \mu_3=55.7445931340356 \\
+    \sigma_1=\sigma_3=4.504552894450979 \\
+    A_1=A_3=0.023696291835675492 \\
+    A_2=-0.047392683335653336 \\
 
-avec actuellement une MSE de 0.00010265487225667491
+  \end{cases}
+  \label{eq:}
+\end{equation}
+
+avec actuellement une MSE de 8.666064583890183e-9
+ 
+
+\subsubsection{méthode développé pour aboutir à cette solution}
+Nous avons exploré beaucoup de pistes différentes pour trouver cette valeur. 
+\par Premièrement nous avons essayer de voir si, en injectant la somme de gausienne dans le modèle linéaire il était possible de trouver par analogie , le nombre de terme mais aussi d'éventuelles symétrie. Par ce calcul fastidieux\todo{renotter le calcul ? } , nous nous sommes rendu compte qu'il était possible de décrire $\delta$ comme une somme de deux gausienne. 
+\par Secondement , la piste numérique à été envisagé.Une approche naive a été de supposer qu'il pouvais s'agir d'un problème de minimisation de la mean square à 3n dimension.Or cette solution s'est révélé largement ineficace au vu du nombre de minimum local présent.La méthode de BassinHopping s'est révélé trop fastidieuse à mettre en place.
+\par Il a donc été question d'envisager les symétrie du problème afin de réduire un maximum le nombre de parametre. Comme sugéré par l'assistant du cours , nous avons considéré qu'une gaussienne comme entrée correspondrais à un coup de volant aller retour. Ce coup de volant aurrait comme effet sur le véhicule de changer son orientation et donc la pente de notre sortie, y .La gausienne de sortie que nous devont considérer peux donc se voir comme une série de trois coup de volant dont deux positif de même intensité et un négatif.Au vu des propriété des gausienne, celle ci est également symétrique en $\mu$.De part toutes ses symétrie, cela a permis de réduire notre problème à 7 paramètre ($\Delta \mu , \sigma_1, \sigma_2 , A_1 , A_2$)
+
+\par Une multitude de méthode numérique ont été exploré pour la détermination de ces constantes.Nous avons décidé de changer notre code python vers un code julia pour plus d'optimisation, de chalenge et d'amusement ( car aucun d'entre nous n'as jamais codé en Julia ).
+\par Nous avons d'habord considéré l'approche \texttt{grid\_search} conseillé par l'assistant.Nous nous sommes d'habord heurté à un problème d'espace à considérer. En effet si l'on considère ne serait ce que $10$ points par dimension cela reviens à $10^n$.Pour palier à ca , nous avons essayé d'utiliser directement le GPU pour paraléliser les différentes taches via \texttt{Cuda.jl}.Ceci a été un échec total , la tache demandé ( calculer la mse avec une combinaison de paramêtre donné) était trop complexe et ralentisait l'exécution du programme.Nous nous sommes donc rabatu avec dépit sur le CPU et avons parallélisé le code au niveau des threads.
+ 
+ \par Un des désavantages majeurs de la méthode \texttt{grid\_search} est que celle ci ne survole l'intervale que par voisinage au fur et a mesure des itérations.Une autre méthode peut être plus saugrenue nous a été de jouer au dés via \texttt{random\_search}, en effet si nous considérons une probabilité uniforme sur l'intervale , notre convergence serait plus attrayante , car celle ci "mappera" l'intervale plus rapidement.
+
+\par Cependant, la pratique nous a démontré que l'approximation des position $\Delta mu, \mu_2=50$ n'était pas parfaite au dela de l'odre de 1e-4.Pour palier à cela , nous n'avons pas conservé cette approximation pour déterminer la valeurs.Pour de grandes précision , nous pouvons à nouveau reconsidérer les minimisation car l'intervale est de taille similaire à celle du puit du minimum.
+
+
 \todo[inline]{formuler ca correctement}
 Afin de trouver la juste somme de gausiennes pour $\delta(t)$, différentes pistes s'offrent à nous.
 \begin{itemize}
@@ -270,7 +289,8 @@ similaire a une gausienne ou une parabole et dont le sens de la courbure indique
 Afin de simplifier encore le nombre de variable , on peut profiter des propriété des parametre d'une gaussienne, dans les 3 coups de volant , l'un semble centré en 50 et le deux autres semblent être équidistant à 50.Il en va de soit aussi dans l'intensité du coup de v 
 
 \section{State-feedback controller, simulations et analyse de Fourier}
-\subsection{}
+\subsection{paramètre du système}
+      \todo[inline]{refaire la meme chose que la P1Q1}
 \subsection{calcul des matrices d'état du système global}
 En remplacant l'équation du controller dans celle du Plant , on obtient:
 \begin{equation}
@@ -289,15 +309,25 @@ Par identification,on remarque donc que : \\
 	\end{cases}
 \end{equation}
 \subsection{simulation du modèle \textit{control loop}}
+\begin{figure*}[!h]
+  \includegraphics[width=0.95\textwidth]{../code/jlplots/Q2_3.pdf}
+  %\caption{}\label{fig:}
+\end{figure*}
+
 % TODO rajouter graphs et donner conclusion 
 \subsection{simulation avec une entrée sinusoidales}
+\begin{figure*}[!h]
+  \includegraphics[width=0.95\textwidth]{../code/jlplots/Q2_4.pdf}
+  \caption{}\label{fig:}
+\end{figure*}
+
 \subsection{domaine fréquentiel}
 
-Afin de se simplifier les notation , il suffit de définir un $\omega$ comme étant $2\pi f_{ref}$ avec $f_{ref}$ la fréquence de référence .  \\
+Afin de se simplifier les notation , il suffit de définir un $\omega$ comme étant $2\pi f_{ref}$ avec $f_{ref}$ la fréquence de référence . Le déphasage de $\frac \pi 6$ sera noté par la lettre $\phi$.On prendra également l'intervale comme étant un intervale allant de 0 a T=100 \\
 
 \begin{align*}
 	2sin(2\pi f t + \dfrac{\pi}{6}) &                                                                                                                                                                                              \\
-	X(j\omega)=                     & 2 \int_{0}^{100} sin(\omega _{0}t + \phi)e^{j\omega t} dt                                                                                                                                    \\
+	X(j\omega)=                     & 2 \int_{0}^{100} sin(\omega _{0}t + \phi)e^{-j\omega t} dt                                                                                                                                    \\
 	=                               & 2 \int_{\frac T2 - \frac T2} ^{\frac T2 + \frac T2} \dfrac{e^{j \omega _0 t}-e^{-j \omega _0 t}}{2j} e^{-j\omega t} dt                                                                       \\
 	=                               & \frac 1j \int_{\frac T2 - \frac T2} ^{\frac T2 + \frac T2} e^{j (\omega _0 - \omega)t+j\phi }- e^{-j( \omega _0+ \omega)t-j\phi} dt                                                          \\
 	=                               & \frac 1j \left [ \dfrac{e^{j(\omega_0-\omega)t+j\phi}}{j(\omega_0-\omega)}- \dfrac{e^{-j(\omega_0+\omega)t-j\phi}}{j(\omega_0+\omega)} \right] _{\frac T2 - \frac T2} ^{\frac T2 + \frac T2} \\
@@ -310,6 +340,11 @@ Afin de se simplifier les notation , il suffit de définir un $\omega$ comme ét
 \end{align*}
 Au vu des sinus cardinaux , les peak se trouvent donc en $\omega =\pm\omega_0$.Autrement dit, $\omega=\pm 2 \pi f_{ref}$
 \subsection{diagrammes d'amplitudes}
+\begin{figure}[!h]
+  \includegraphics[width=0.95\textwidth]{../code/jlplots/Q2_6.pdf}
+  \caption{}\label{fig:}
+\end{figure}
+
 Au vu du signal de sortie que l'on obtient dans la partie 4 , il est assez visuel de voir qu'il s'agit d'une sinusoide d'amplitude et de fréquence visible.
 Ici pour tracer numériquement on aurrait pu le faire a la main. Nous avons décidé de se baser sur la Discrete Fourier Transform ( DFT ) pour récupérer le graphique de fréquence.
 \section{Fonction de transfert et diagrammes de Bode}
@@ -323,7 +358,10 @@ $$H(s)=\tilde{C} \left (s \mathbb{I} _2 - \tilde{A} \right)^{-1} \tilde{B} + \ti
 	     & =\dfrac{1}{s^2 + \frac{v_0}b [a k_1 + k_2]s + \frac{k_1 v_0 ^2}b} \begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix}k_2 \frac{v_0}b+s & v_0 -k_2 v_0 \frac ab \\ - k_1 \frac{v_0}b & k_1 v_0 \frac ab +s \end{bmatrix}
 	\begin{bmatrix} k_r v_0 \frac ab \\ k_r \frac {v_0}b \end{bmatrix}                                                                                                                                                             \\
 	     & =\dfrac{k_r v_0}{b}\dfrac{as+v_0}{s^2 + \frac{v_0}b [a k_1 + k_2 ]s + \frac{k_1 v_0 ^2}b}                                                                                                                                \\
-	\text{en remplacant par les valeurs on obtient;}                                                                                                                                                                               \\
+\end{align*}
+ en remplacant par les valeurs on obtient;
+
+\begin{align*}
 	     & = \dfrac{0.440s + 4}{s^2 + 2 s + 4}
 \end{align*}
 Au vu de l'alure de $H(s)$ il est aisé de remarqué son zéros en $\frac{-b}{a k_r}$
