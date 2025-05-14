@@ -1,15 +1,12 @@
 using Base.Threads
 using OrdinaryDiffEq
-using Optimization
-using Symbolics
 using ControlSystems
 using ProgressMeter
 using LinearAlgebra
 using Plots
-using Optim
 using Statistics
 using FFTW
-const t_eval = 0:0.001:100
+const t_eval = 0:0.01:100
 const tspan = [0.0, 100.0]
 const a = 1.1
 const b = 3.3
@@ -60,9 +57,10 @@ function Q1_8()
     sigma1,
     sigma2,
     a1,
-    a2 =[44.47466746957489, 50.10972389695686, 55.7445931340356, 4.504552894450979, 4.151233595972581, 0.023696291835675492, -0.047392683335653336]
+    a2 = [44.47466746957489, 50.10972389695686, 55.7445931340356, 4.504552894450979,
+        4.151233595972581, 0.023696291835675492, -0.047392683335653336]
     @inbounds prob = ODEProblem(
-     linearode2!, [0.0, 0.0], [0, 100], (gauss3, mu1, mu2, mu3, sigma1, sigma2, a1, a2))
+        linearode2!, [0.0, 0.0], [0, 100], (gauss3, mu1, mu2, mu3, sigma1, sigma2, a1, a2))
     @inbounds sol = solve(prob, saveat = t_eval)[1, :]
     real_val = gaussian.(t_eval, 5, 50, 25)
     plot(t_eval, sol, label = ["y(t)" "θ(t)"], linestyle = :dot)
@@ -183,4 +181,5 @@ end
     @async Q2_6()
     @async Q3_1()
 end
+println("done!")
 #"

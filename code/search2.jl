@@ -1,4 +1,3 @@
-
 ENV["GKSwstype"] = "100"
 ENV["JULIA_NUM_THREADS"] = string(Sys.CPU_THREADS)
 # fast math allow approx in 1e-10 +- with speed perf
@@ -45,7 +44,7 @@ function mse(p)
     # problem + solve = solveivp  
     @inbounds prob = ODEProblem(
         ode2!, [0.0, 0.0], [0, 100], (gauss3, mu1, mu2, mu3, sigma1, sigma2, a1, a2))
-    @inbounds sol = solve(prob, saveat = t_eval,abstol=1e-16)[1, :]
+    @inbounds sol = solve(prob, saveat = t_eval, abstol = 1e-16)[1, :]
     # . means operation over the array 
     # ie .- is equal to a for loop where result[i]=real[i]-sol[i] but optimized
     @inbounds mse = mean((real_val .- sol) .^ 2)
@@ -64,8 +63,8 @@ function random_search(n)
     mu1_range = (43.4, 44)
     mu2_range = (50, 50.2)
     mu3_range = (56.5, 56.8)
-    sigma1_range = (4.3,4.4)
-    sigma2_range = (3.72,3.73)
+    sigma1_range = (4.3, 4.4)
+    sigma2_range = (3.72, 3.73)
     a1_range = (0.0165, 0.018)
     a2_range = (-0.036, -0.033)
     minval = Vector{Float64}(undef, 7)
@@ -100,11 +99,11 @@ function random_search(n)
     println(minval)
     println(min_mse)
     initialguess=minval
-      #initialguess=[44.47466746957489, 50.10972389695686, 55.7445931340356, 4.504552894450979, 4.151233595972581, 0.023696291835675492, -0.047392683335653336]
-    res=optimize(mse,intialguess,
+    #initialguess=[44.47466746957489, 50.10972389695686, 55.7445931340356, 4.504552894450979, 4.151233595972581, 0.023696291835675492, -0.047392683335653336]
+    res=optimize(mse, intialguess,
         f_abstol = 1e-16,
         x_abstol = 1e-16,
-        iterations = 1_000_000, 
+        iterations = 1_000_000,
         store_trace = false,
         show_trace = false)
     println(Optim.minimum(res))
@@ -166,7 +165,7 @@ function paufiner()
     init = [
         44.474001685431354,
         50.109728232042926,
-        55.74527249527475,    
+        55.74527249527475,
         4.504498952675612,
         4.150817864670581,
         0.0236891455876399,
@@ -175,11 +174,11 @@ function paufiner()
 
     # all bounds must be Float64, and lower ≤ initialguess ≤ upper
     lb = [43.4, 50.0, 55.7, 4.3, 3.72, 0.0165, -0.048]
-    ub = [44.0, 50.2, 56.8, 4.4, 3.73, 0.018,  -0.033]
-    res=optimize(mse,init,
+    ub = [44.0, 50.2, 56.8, 4.4, 3.73, 0.018, -0.033]
+    res=optimize(mse, init,
         f_abstol = 1e-16,
         x_abstol = 1e-16,
-        iterations = 1_000_000_000, 
+        iterations = 1_000_000_000,
         store_trace = false,
         show_trace = false)
     println(Optim.minimum(res))

@@ -1,11 +1,12 @@
 .PHONY: jrun clean 
 run : jrun
 init:
-	julia -e 'using Pkg;Pkg.instantiate()'
+	mkdir -p jlplots
+	julia --project=. -e 'using Pkg;Pkg.instantiate()'
 jrun:
-	julia --threads=auto --math-mode=ieee main.jl
+	julia --project=. --threads=auto main.jl
 jrunfast:
-	julia --optimize=0 --compile=min --threads=auto --math-mode=fast  main.jl
+	julia --project=. --optimize=0 --compile=min --threads=auto --math-mode=fast  main.jl
 jformat:
 	julia -e 'using JuliaFormatter; format(".", SciMLStyle())'
 clean:
