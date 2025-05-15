@@ -1,7 +1,6 @@
 .PHONY: jrun clean 
 run : jrun
 init:
-	mkdir -p jlplots
 	julia --project=. -e 'using Pkg;Pkg.instantiate()'
 jrun:
 	julia --project=. --threads=auto main.jl
@@ -10,5 +9,5 @@ jrunfast:
 jformat:
 	julia -e 'using JuliaFormatter; format(".", SciMLStyle())'
 clean:
-	rm jlplots/*.pdf
+	rm jlplots/*.pdf best*.txt
 

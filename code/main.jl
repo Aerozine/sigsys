@@ -3,6 +3,7 @@ using OrdinaryDiffEq
 using ControlSystems
 using ProgressMeter
 using LinearAlgebra
+using Optim
 using Plots
 using Statistics
 using FFTW
@@ -17,7 +18,7 @@ const C = [1.0 0.0]
 const D = [0.0]
 # search.jl basicly include all ODE function , search algorithm etc
 # all the funny stuff is inside
-include("search2.jl")
+include("search.jl")
 # the main file is used for plot and questions
 #    ____            _     _ 
 #   |  _ \ __ _ _ __| |_  / |
@@ -67,7 +68,10 @@ function Q1_8()
     plot!(t_eval, real_val)
     #plot(t_eval,abs.(sol.-real_val))
     savefig("jlplots/Q1_8.pdf")
-    println("best MSE :$(mse([mu1, mu2, mu3, sigma1 , sigma2, a1, a2]))")
+    open("bestmse.txt", "w") do io
+      println(io, "best MSE : $(mse([mu1, mu2, mu3, sigma1, sigma2, a1, a2]))")
+    end
+    #println("best MSE :$(mse([mu1, mu2, mu3, sigma1 , sigma2, a1, a2]))")
 end
 
 #    ____            _     ____  
@@ -152,7 +156,7 @@ function Q3_1()
     Dtild=D*kr
     sys_ss = ss(Atild, Btild, Ctild, Dtild)
     sys_tf = tf(sys_ss)
-    display(sys_tf)
+    #display(sys_tf)
     setPlotScale("dB")
     fig = bodeplot(sys_tf; plotphase = true, grid = true,
         title = "diagram de bode")
@@ -173,13 +177,14 @@ end
 #"
 # plotting asynchronously to speed up the process
 @sync begin
-    @async Q1_3()
-    @async Q1_7()
-    @async Q1_8()
-    @async Q2_3()
-    @async Q2_4()
-    @async Q2_6()
-    @async Q3_1()
+  @async (Q1_3();print("."))
+  @async (Q1_7();print("."))
+  @async (Q1_8();print("."))
+  @async (Q2_3();print("."))
+  @async (Q2_4();print("."))
+  @async (Q2_6();print("."))
+  @async (Q3_1();print("."))
 end
 println("done!")
+random_search(Int(100))
 #"
